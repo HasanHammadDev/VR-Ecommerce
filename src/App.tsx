@@ -1,14 +1,19 @@
 import Home from './components/Pages/Home';
 import Products from './components/Pages/Products';
 import { Routes, Route } from 'react-router-dom';
+import { CartProvider } from './components/context/context';
+import Cart from './components/Pages/Cart';
 
 
 const App: React.FC = () => {
   return (
-    <Routes>
-      <Route path="/" element={ <Home /> } />
-      <Route path="/products" element={ <Products /> } />
-    </Routes>
+    <CartProvider>
+      <Routes>
+        <Route path="/" element={ <Home /> } />
+        <Route path="/products" element={ <Products /> } />
+        <Route path="/cart" element={ <Cart /> } />
+      </Routes>
+    </CartProvider>
   );
 };
 
