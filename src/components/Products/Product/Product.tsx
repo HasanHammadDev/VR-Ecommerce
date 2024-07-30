@@ -1,57 +1,34 @@
-import { useCart } from "../../context/context";
-import { useState, ChangeEvent } from "react";
+import { Link } from "react-router-dom";
 
 interface ProductProps {
     products: {
+        id: number;
         name: string;
-        price: number;
-        image: string;
+        description: string;
+        price: string;
+        category: string;
+        imageUrl: string;
+        createdAt: Date;
     }[];
 }
 
 const Product: React.FC<ProductProps> = ({ products }) => {
-    const { incrementItem } = useCart();
-
-    const QuantitySelector: React.FC = () => {
-        const [quantity, setQuantity] = useState<number>(1);
-    
-        const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
-            setQuantity(parseInt(event.target.value, 10));
-        };
-
-        return (
-            <select
-                id="quantity"
-                className="border ml-1 rounded-xl"
-                value={quantity}
-                onChange={handleChange}
-                aria-label="Select quantity"
-            >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-            </select>
-        );
-    };
+    const productDetailsRoute: string = "/products";
 
     return (
-        <div className="border m-5 rounded-lg p-5 flex justify-start items-center">
-            {products.map((product, index) => (
-                <div className="m-2 flex flex-col items-center" key={index}>
-                    <h2 className="font-bold">{product.name}</h2>
-                    <img className="rounded" src={product.image} alt={product.name} />
-                    <div className="flex justify-center my-1">
-                        <p className="mr-9 font-bold">${product.price}</p>
-                        <label htmlFor={`quantity-${index}`} className="mr-2">Quantity:</label>
-                        <QuantitySelector />
-                    </div>
-                    <button
-                        onClick={incrementItem}
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl"
-                    >
-                        Add To Cart
-                    </button>
+        <div className="border m-5 rounded-lg p-5 flex flex-wrap justify-center items-center shadow-2xl">
+            {products.map((product) => (
+                <div key={product.id}>
+                    <Link className="m-4 flex flex-col items-center" to={`${productDetailsRoute}/${product.id}`}>
+                        <h2 className="font-bold">{product.name}</h2>
+                        <img className="rounded" src={product.imageUrl} alt={product.name} />
+                        <div className="flex justify-center my-1">
+                            <p className="mr-9 font-bold">${product.price}</p>
+
+                        </div>
+                    </Link>
                 </div>
+
             ))}
         </div>
     );

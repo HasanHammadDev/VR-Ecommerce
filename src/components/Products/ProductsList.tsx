@@ -1,35 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Product from "./Product/Product";
+import GetProducts from "../API/GetProducts";
 
-interface ProductType {
+interface Product {
+    id: number;
     name: string;
-    price: number;
-    image: string;
-}
+    description: string;
+    price: string;
+    category: string;
+    imageUrl: string;
+    createdAt: Date;
+  }
 
 
 const ProductList: React.FC = () => {
-    const [products] = useState<ProductType[]>([
-        {
-            name: 'Oculus Rift S',
-            price: 399.99,
-            image: 'https://fakeimg.pl/200x200/'
-        },
-        {
-            name: 'HTC Vive Pro',
-            price: 799.99,
-            image: 'https://fakeimg.pl/200x200/'
-        },
-        {
-            name: 'PlayStation VR',
-            price: 299.99,
-            image: 'https://fakeimg.pl/200x200/'
+    const [products, setProducts] = useState<Product[]>([]);
+
+    useEffect(() => {
+      const fetchProducts = async () => {
+        try {
+          const products = await GetProducts();
+          setProducts(products);
+        } catch (error) {
+          console.error('Error', error);
         }
-    ]);
+      };
+  
+      fetchProducts();
+    }, []);
 
 
     return (
         <>
+            <h1 className="font-semibold m-5 text-3xl">Featured</h1>
             <Product products={products} />
         </>
     );
