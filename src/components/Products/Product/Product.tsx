@@ -15,8 +15,6 @@ interface ProductProps {
 const Product: React.FC<ProductProps> = ({ products }) => {
     const productDetailsRoute: string = "/products";
 
-
-
     return (
         <div className="border m-5 rounded-lg p-5 flex flex-wrap justify-center items-center shadow-2xl">
             {products.map((product) => (
