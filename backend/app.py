@@ -19,7 +19,6 @@ db.init_app(app)
 @app.route('/products', methods=['GET'])
 def get_products():
     products = Product.query.all()
-    print(products)
     products_list = [
         {
             "id": product.id,
@@ -33,6 +32,23 @@ def get_products():
         for product in products
     ]
     return jsonify(products_list), 200
+
+@app.route('/products/<int:id>', methods=['GET'])
+def get_product(id):
+    product = Product.query.get(id)
+    if product is None:
+        return jsonify({'message': 'Product Not Found', }), 404
+    
+    product_data = {
+        "id": product.id,
+        "name": product.name,
+        "description": product.description,
+        "price": str(product.price),
+        "category": product.category,
+        "imageUrl": product.image_url,
+        "created_at": product.created_at.isoformat()
+    }
+    return jsonify(product_data), 200
 
 
 if __name__ == '__main__':
