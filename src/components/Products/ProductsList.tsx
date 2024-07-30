@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Product from "./Product/Product";
-import getProducts from "../API/GetProducts";
+import GetProducts from "../API/GetProducts";
 
 interface Product {
     id: number;
@@ -19,8 +19,7 @@ const ProductList: React.FC = () => {
     useEffect(() => {
       const fetchProducts = async () => {
         try {
-          const products = await getProducts();
-          console.log(products)
+          const products = await GetProducts();
           setProducts(products);
         } catch (error) {
           console.error('Error', error);

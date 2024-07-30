@@ -13,7 +13,7 @@ interface Product {
     createdAt: Date;
   }
   
-  const getProducts = async (): Promise<Product[]> => {
+  const GetProducts = async (): Promise<Product[]> => {
     try {
       const response = await axios.get<Product[]>(`${endpoint}/products`);
       return response.data;
@@ -23,4 +23,4 @@ interface Product {
     }
   };
 
-  export default getProducts;
+  export default GetProducts;

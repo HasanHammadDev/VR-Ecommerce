@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import GetProductDetails from "../API/GetProductDetails";
 import Header from "../Header/Header";
 import { useCart } from "./../context/context";
+import GetProducts from "../API/GetProducts";
+import Product from "../Products/Product/Product";
 
 interface Product {
     id: number;
@@ -18,13 +20,37 @@ const ProductDetails: React.FC = () => {
     const { incrementItem } = useCart();
     const { id } = useParams();
     const [productDetails, setProductDetails] = useState<Product | null>(null)
+    const [similarProducts, setSimilarProducts] = useState<Product[]>([])
 
     useEffect(() => {
         const fetchProductDetails = async () => {
-            const response = await GetProductDetails(Number(id));
-            setProductDetails(response);
-            console.log(response)
+            try {
+                const response = await GetProductDetails(Number(id));
+                setProductDetails(response);
+            } catch (error) {
+                console.error("Error fetching product details", error)
+            }
+
         }
+
+        const fetchSimilarProducts = async () => {
+            const randomizedProducts = (response: Product[]) => {
+                const filteredResponse = response.filter(product => product.id !== productDetails?.id)
+                // Pick 4 random items from the filtered array
+                const randomItems = filteredResponse
+                    .sort(() => 0.5 - Math.random())
+                    .slice(0, 4);
+
+                setSimilarProducts(randomItems);
+            }
+            try {
+                const response: Product[] = await GetProducts();
+                randomizedProducts(response)
+            } catch (error) {
+                console.error("Error fetching similar products", error)
+            }
+        }
+        fetchSimilarProducts()
         fetchProductDetails()
     }, [id])
 
@@ -38,7 +64,7 @@ const ProductDetails: React.FC = () => {
         return (
             <select
                 id="quantity"
-                className="border ml-1 rounded-xl"
+                className="border ml-1 rounded-xl p-1"
                 value={quantity}
                 onChange={handleChange}
                 aria-label="Select quantity"
@@ -65,8 +91,8 @@ const ProductDetails: React.FC = () => {
                     <p className="my-3" >{productDetails?.description} Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis omnis ipsum, perferendis, quas nam laboriosam id accusantium maxime temporibus incidunt similique consequatur ratione. Quidem magni aliquid alias pariatur ad ipsum eligendi vitae, laudantium aperiam facilis aliquam error temporibus repellendus ipsam cumque? Aliquid ipsam quos placeat. Saepe corporis at quisquam vitae.</p>
                     <p className="text-3xl mt-5 font-bold">${productDetails?.price}</p>
                     <div>
-                    <label htmlFor={`quantity`} className="mr-2">Quantity:</label>
-                    <QuantitySelector />
+                        <label htmlFor={`quantity`} className="mr-2">Quantity:</label>
+                        <QuantitySelector />
                     </div>
 
                     <button
@@ -82,6 +108,14 @@ const ProductDetails: React.FC = () => {
                     </button>
                 </div>
 
+
+            </div>
+
+            <div className="flex flex-col justify-center items-center w-full my-2">
+                <h1 className="text-3xl font-semibold">More Like This!</h1>
+                <div>
+                    <Product products={similarProducts} />
+                </div>
             </div>
         </>
 
