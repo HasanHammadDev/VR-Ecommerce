@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { useState, ChangeEvent } from "react";
 
 interface ProductProps {
     products: {
