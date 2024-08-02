@@ -5,7 +5,7 @@ interface SlideshowPanelProps {
 }
 
 const Panel: React.FC<SlideshowPanelProps> = ({ images }) => {
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
 
     const nextSlide = () => {
         setCurrentImageIndex((prevIndex) =>
@@ -23,7 +23,7 @@ const Panel: React.FC<SlideshowPanelProps> = ({ images }) => {
         const interval = setInterval(nextSlide, 3000); // Change slide every 3 seconds
 
         return () => clearInterval(interval);
-    }, [images.length]);
+    }, [images.length, currentImageIndex]);
 
     return (
         <div className="flex items-center justify-center bg-white border shadow-2xl shadow-black-900 rounded-md relative mx-60 mt-5 h-96">
