@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Product from "./Product/Product";
-import GetProducts from "../API/GetProducts";
+import { GetProducts } from "../../Utility/api";
 
 interface Product {
     id: number;

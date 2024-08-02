@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import RegisterAccount from '../API/RegisterAccount';
+import { RegisterAccount } from '../../Utility/api';
 RegisterAccount
 
 interface Inputs {
