@@ -1,9 +1,8 @@
 import { useEffect, useState, ChangeEvent } from "react";
 import { useParams } from "react-router-dom";
-import GetProductDetails from "../API/GetProductDetails";
 import Header from "../Header/Header";
 import { useCart } from "./../context/context";
-import GetProducts from "../API/GetProducts";
+import { GetProducts, GetProductDetails } from "../../Utility/api";
 import Product from "../Products/Product/Product";
 
 interface Product {
