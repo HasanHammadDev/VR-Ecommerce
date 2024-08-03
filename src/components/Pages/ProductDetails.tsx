@@ -3,17 +3,10 @@ import { useParams } from "react-router-dom";
 import Header from "../Header/Header";
 import { useCart } from "./../context/context";
 import { GetProducts, GetProductDetails } from "../../Utility/api";
-import Product from "../Products/Product/Product";
+import ProductComponent from "../Products/Product/Product";
+import { Product } from "../../../types/types";
 
-interface Product {
-    id: number;
-    name: string;
-    description: string;
-    price: string;
-    category: string;
-    imageUrl: string;
-    createdAt: Date;
-}
+
 
 const ProductDetails: React.FC = () => {
     const { incrementItem } = useCart();
@@ -113,7 +106,7 @@ const ProductDetails: React.FC = () => {
             <div className="flex flex-col justify-center items-center w-full my-2">
                 <h1 className="text-3xl font-semibold">More Like This!</h1>
                 <div>
-                    <Product products={similarProducts} />
+                    <ProductComponent products={similarProducts} />
                 </div>
             </div>
         </>

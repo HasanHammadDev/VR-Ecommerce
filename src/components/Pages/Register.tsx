@@ -1,27 +1,9 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { RegisterAccount } from '../../Utility/api';
-RegisterAccount
+import { RegisterResponse, Inputs, PasswordCriteria } from '../../../types/types';
 
-interface Inputs {
-    username: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-}
 
-interface PasswordCriteria {
-    minLength: boolean;
-    hasUpperCase: boolean;
-    hasLowerCase: boolean;
-    hasNumber: boolean;
-    hasSpecialChar: boolean;
-}
-
-interface RegisterResponse {
-    success: boolean;
-    message: string;
-}
 
 const Checkmark: React.FC<{ isVisible: boolean }> = ({ isVisible }) => (
     <svg
