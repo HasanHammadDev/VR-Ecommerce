@@ -1,10 +1,6 @@
 import { createContext, useContext, useState } from 'react';
+import { CartProviderProps, CartContextType } from '../../../types/types';
 
-interface CartContextType {
-    itemCount: number;
-    incrementItem: () => void;
-    decrementItem: () => void;
-}
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
@@ -16,9 +12,7 @@ export const useCart = () => {
     return context;
 };
 
-interface CartProviderProps {
-    children: React.ReactNode;
-}
+
 
 export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     const [itemCount, setItemCount] = useState<number>(0);

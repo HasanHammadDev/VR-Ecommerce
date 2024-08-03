@@ -1,25 +1,5 @@
 import axios from "axios";
-
-interface Product {
-    id: number;
-    name: string;
-    description: string;
-    price: string;
-    category: string;
-    imageUrl: string;
-    createdAt: Date;
-  }
-
-  interface accountInformation {
-    email: string,
-    username: string,
-    password: string
-}
-
-interface RegisterResponse {
-    success: boolean;
-    message: string;
-}
+import { Product, accountInformation, RegisterResponse } from "../../types/types";
 
 let endpoint = "http://localhost:5000"
 

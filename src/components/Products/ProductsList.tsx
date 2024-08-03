@@ -1,16 +1,9 @@
 import { useEffect, useState } from "react";
-import Product from "./Product/Product";
+import ProductComponent from "./Product/Product";
 import { GetProducts } from "../../Utility/api";
+import { Product } from "../../../types/types.ts"
 
-interface Product {
-    id: number;
-    name: string;
-    description: string;
-    price: string;
-    category: string;
-    imageUrl: string;
-    createdAt: Date;
-  }
+
 
 
 const ProductList: React.FC = () => {
@@ -33,7 +26,7 @@ const ProductList: React.FC = () => {
     return (
         <>
             <h1 className="font-semibold m-5 text-3xl">Featured</h1>
-            <Product products={products} />
+            <ProductComponent products={products} />
         </>
     );
 }

@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
+import { SlideshowPanelProps } from '../../../types/types';
 
-interface SlideshowPanelProps {
-    images: string[];
-}
 
 const Panel: React.FC<SlideshowPanelProps> = ({ images }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
