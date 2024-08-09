@@ -1,10 +1,10 @@
 import { useEffect, useState, ChangeEvent } from "react";
 import { useParams } from "react-router-dom";
 import Header from "../Header/Header";
-import { useCart } from "./../context/context";
-import { GetProducts, GetProductDetails } from "../../Utility/api";
+import { useCart } from "../context/CartContext";
+import { GetProducts, GetProductDetails, addToCart } from "../../Utility/api";
 import ProductComponent from "../Products/Product/Product";
-import { Product } from "../../../types/types";
+import { Product, ProductInformation } from "../../../types/types";
 
 
 
@@ -13,6 +13,11 @@ const ProductDetails: React.FC = () => {
     const { id } = useParams();
     const [productDetails, setProductDetails] = useState<Product | null>(null)
     const [similarProducts, setSimilarProducts] = useState<Product[]>([])
+    const [quantity, setQuantity] = useState<number>(1);
+    const [productInformation, setProductInformation] = useState<ProductInformation>({
+        product_id: Number(id),
+        quantity: quantity
+    })
 
     useEffect(() => {
         const fetchProductDetails = async () => {
@@ -46,9 +51,27 @@ const ProductDetails: React.FC = () => {
         fetchProductDetails()
     }, [id])
 
-    const QuantitySelector: React.FC = () => {
-        const [quantity, setQuantity] = useState<number>(1);
+    useEffect(() => {
+        setProductInformation(prevState => ({
+            ...prevState, // keep the existing product_id
+            quantity: quantity
+        }));
+    }, [quantity])
 
+    const addProductToCart = async (productInformation: ProductInformation) => {
+        try {
+            console.log(quantity)
+            const response = await addToCart(productInformation);
+            console.log(response)
+            if (response.success) {
+                incrementItem();
+            }
+        } catch (error) {
+            console.error("There was an error adding the product to cart", error)
+        }
+    }
+
+    const QuantitySelector: React.FC = () => {
         const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
             setQuantity(parseInt(event.target.value, 10));
         };
@@ -88,7 +111,9 @@ const ProductDetails: React.FC = () => {
                     </div>
 
                     <button
-                        onClick={incrementItem}
+                        onClick={() => {
+                            addProductToCart(productInformation)
+                        } }
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl mt-5 mr-5"
                     >
                         Add To Cart
