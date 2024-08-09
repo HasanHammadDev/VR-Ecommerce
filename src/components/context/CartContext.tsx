@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react';
-import { CartProviderProps, CartContextType } from '../../../types/types';
+import { ProviderProps, CartContextType } from '../../../types/types';
 
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -14,7 +14,7 @@ export const useCart = () => {
 
 
 
-export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
+export const CartProvider: React.FC<ProviderProps> = ({ children }) => {
     const [itemCount, setItemCount] = useState<number>(0);
 
     const incrementItem = () => {
