@@ -31,7 +31,7 @@ export interface PasswordCriteria {
     hasSpecialChar: boolean;
 }
 
-export interface RegisterResponse {
+export interface GeneralServerResponse {
     success: boolean;
     message: string;
 }
@@ -53,7 +53,7 @@ export interface CartContextType {
     decrementItem: () => void;
 }
 
-export interface CartProviderProps {
+export interface ProviderProps {
     children: React.ReactNode;
 }
 
@@ -61,4 +61,21 @@ export interface accountInformation {
     email: string,
     username: string,
     password: string
+}
+
+export interface AuthContextType {
+    isLoggedIn: boolean;
+    setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface ProfileResponse {
+    email: string,
+    username: string,
+    password: string,
+    created_at: Date
+}
+
+export interface ProductInformation {
+    product_id: number;
+    quantity: number;
 }
