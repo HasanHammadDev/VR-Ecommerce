@@ -11,15 +11,16 @@ const Header: React.FC = () => {
     const loginRoute: string = '/login';
     const cartRoute: string = '/cart';
     const profileRoute: string = '/profile';
-    const { itemCount } = useCart();
+    const { itemCount, setItemCount } = useCart();
     const { isLoggedIn, setIsLoggedIn } = useAuth();
-    
+
     const handleLogout = async () => {
         try {
             const response = await logoutAccount();
             console.log(response);
             if (response.success) {
                 setIsLoggedIn(false);
+                setItemCount(0)
             } else {
                 console.error("Logout failed:", response.message || "Unknown error");
             }

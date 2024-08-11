@@ -29,6 +29,7 @@ export const CartProvider: React.FC<ProviderProps> = ({ children }) => {
 
     const contextValue: CartContextType = {
         itemCount,
+        setItemCount,
         incrementItem,
         decrementItem,
     };
