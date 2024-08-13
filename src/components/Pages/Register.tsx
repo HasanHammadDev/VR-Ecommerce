@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import { RegisterAccount } from '../../Utility/api';
-import { RegisterResponse, Inputs, PasswordCriteria } from '../../../types/types';
+import { registerAccount } from '../../Utility/api';
+import { GeneralServerResponse, Inputs, PasswordCriteria } from '../../../types/types';
 
 
 
@@ -73,7 +73,7 @@ const Register: React.FC = () => {
                 setErrorMsg('All fields are required.');
                 return;
             }
-            const response: RegisterResponse = await RegisterAccount(inputs);
+            const response: GeneralServerResponse = await registerAccount(inputs);
             if (!validatePassword()) {
                 setErrorMsg('Password must meet all criteria.');
             } else if (inputs.password !== inputs.confirmPassword) {
