@@ -2,7 +2,7 @@ import { useEffect, useState, ChangeEvent } from "react";
 import { useParams } from "react-router-dom";
 import Header from "../Header/Header";
 import { useCart } from "../context/CartContext";
-import { GetProducts, GetProductDetails, addToCart } from "../../Utility/api";
+import { getProducts, getProductDetails, addToCart } from "../../Utility/api";
 import ProductComponent from "../Products/Product/Product";
 import { Product, ProductInformation } from "../../../types/types";
 
@@ -22,7 +22,7 @@ const ProductDetails: React.FC = () => {
     useEffect(() => {
         const fetchProductDetails = async () => {
             try {
-                const response = await GetProductDetails(Number(id));
+                const response = await getProductDetails(Number(id));
                 setProductDetails(response);
             } catch (error) {
                 console.error("Error fetching product details", error)
@@ -41,7 +41,7 @@ const ProductDetails: React.FC = () => {
                 setSimilarProducts(randomItems);
             }
             try {
-                const response: Product[] = await GetProducts();
+                const response: Product[] = await getProducts();
                 randomizedProducts(response)
             } catch (error) {
                 console.error("Error fetching similar products", error)
