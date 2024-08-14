@@ -54,10 +54,6 @@ const Profile: React.FC = () => {
             <p>Created On:</p>
             <p>{new Date(formattedDate).toLocaleString()}</p>
           </div>
-
-          {/* <button className="bg-green-600 text-white font-semibold py-2 px-4 rounded w-full hover:bg-green-800 hover:shadow-lg transition duration-300">
-            Buy All
-          </button> */}
         </div>
       </div>
     </div>
