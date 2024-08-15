@@ -8,22 +8,27 @@ import Login from './components/Pages/Login';
 import Register from './components/Pages/Register';
 import { AuthProvider } from './components/context/AuthContext';
 import Profile from './components/Pages/Profile';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const App: React.FC = () => {
+  const googleClientId = import.meta.env.VITE_REACT_APP_GOOGLE_CLIENT_ID as string;
   return (
-    <AuthProvider>
-      <CartProvider>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/products/:id" element={<ProductDetails />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path='/profile' element={<Profile />} />
-        </Routes>
-      </CartProvider>
-    </AuthProvider>
+    <GoogleOAuthProvider clientId={googleClientId}>
+      <AuthProvider>
+        <CartProvider>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/products/:id" element={<ProductDetails />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path='/profile' element={<Profile />} />
+          </Routes>
+        </CartProvider>
+      </AuthProvider>
+    </GoogleOAuthProvider>
+
 
   );
 };
