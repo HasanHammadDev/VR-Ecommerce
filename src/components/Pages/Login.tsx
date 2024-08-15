@@ -1,9 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, ChangeEvent, FormEvent } from "react";
 import { Credentials } from "../../../types/types";
-import { loginAccount } from "../../Utility/api";
-import { useAuth } from "../context/AuthContext"
-
+import { loginAccount, loginWithGoogle } from "../../Utility/api";
+import { useAuth } from "../context/AuthContext";
+import { GoogleLogin } from '@react-oauth/google';
 
 const Login: React.FC = () => {
   const registerRoute: string = '/register';
@@ -14,7 +14,6 @@ const Login: React.FC = () => {
   const [errorMsg, setErrorMsg] = useState<string>('');
   const navigate = useNavigate();
   const { setIsLoggedIn } = useAuth();
-
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
@@ -30,16 +29,42 @@ const Login: React.FC = () => {
     try {
       const response = await loginAccount(credentials);
       if (response.success) {
-        //Redirect user to profile
         navigate('/profile');
         setIsLoggedIn(true);
+      } else {
+        setErrorMsg(response.message);
       }
-      setErrorMsg(response.message)
     } catch (error) {
       console.error(error);
+      setErrorMsg('An error occurred during login. Please try again.');
     }
-
   }
+
+  // Google Login
+  const handleGoogleLoginSuccess = async (credentialResponse: any) => {
+    try {
+      if (credentialResponse.credential) {
+        const response = await loginWithGoogle(credentialResponse.credential);
+        console.log(response)
+        if (response.success) {
+          navigate('/profile');
+          setIsLoggedIn(true);
+        } else {
+          setErrorMsg(response.message);
+        }
+      } else {
+        setErrorMsg('No credentials returned from Google sign-in.');
+      }
+    } catch (error) {
+      console.error('Error during Google login:', error);
+      setErrorMsg(error instanceof Error ? error.message : 'Google sign-in failed. Please try again.');
+    }
+  };
+
+  const handleGoogleLoginError = () => {
+    setErrorMsg('Google sign-in failed. Please try again.');
+  };
+
 
   return (
     <>
@@ -85,11 +110,24 @@ const Login: React.FC = () => {
             Login
           </button>
 
+          <div className="my-4 flex items-center justify-between">
+            <hr className="w-full" />
+            <span className="px-2 text-gray-500">or</span>
+            <hr className="w-full" />
+          </div>
+          <div className="flex justify-center">
+            <GoogleLogin
+              onSuccess={handleGoogleLoginSuccess}
+              onError={handleGoogleLoginError}
+              type="standard"
+            />
+          </div>
+
           {errorMsg && (
-            <div className="text-red-500 font-semibold text-center">{errorMsg}</div>
+            <div className="text-red-500 font-semibold text-center mt-2">{errorMsg}</div>
           )}
 
-          <p className="text-gray-600 text-center">
+          <p className="text-gray-600 text-center mt-4">
             Don't have an account?{" "}
             <Link to={registerRoute} className="text-blue-500 hover:text-blue-900 underline">
               Register New Account
@@ -98,7 +136,6 @@ const Login: React.FC = () => {
         </form>
       </div>
     </>
-
   );
 }
 
