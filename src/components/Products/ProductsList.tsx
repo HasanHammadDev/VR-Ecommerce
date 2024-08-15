@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import ProductComponent from "./Product/Product";
-import { GetProducts } from "../../Utility/api";
+import { getProducts } from "../../Utility/api";
 import { Product } from "../../../types/types.ts"
-
-
-
 
 const ProductList: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
@@ -12,7 +9,7 @@ const ProductList: React.FC = () => {
     useEffect(() => {
       const fetchProducts = async () => {
         try {
-          const products = await GetProducts();
+          const products = await getProducts();
           setProducts(products);
         } catch (error) {
           console.error('Error', error);

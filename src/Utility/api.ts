@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Product, accountInformation, GeneralServerResponse, Credentials, LoginResponse, ProfileResponse, ProductInformation, CartResponse } from "../../types/types";
 
-let endpoint = "http://localhost:5000"
+let endpoint = import.meta.env.VITE_REACT_APP_API_ENDPOINT as string;
 
 
 export const getProductDetails = async (id: number): Promise<Product> => {
@@ -56,12 +56,37 @@ export const loginAccount = async (loginInformation: Credentials): Promise<Login
         if (axios.isAxiosError(error)) {
             // Handle Axios-specific errors
             console.error('Error logging in:', error.response?.data || error.message);
+            return error.response?.data;
         } else {
             console.error('Unexpected error:', error);
         }
         throw error;
     }
 }
+
+export async function loginWithGoogle(credential: string) {
+    try {
+      const response = await axios.post(`${endpoint}/login/google`, 
+        { credential },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        }
+      );
+      
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error('Error during Google login:', error.response?.data);
+        throw new Error(error.response?.data?.message || 'An error occurred during Google login');
+      } else {
+        console.error('Unexpected error:', error);
+        throw new Error('An unexpected error occurred');
+      }
+    }
+  }
 
 export const logoutAccount = async (): Promise<GeneralServerResponse> => {
     try {
@@ -100,7 +125,6 @@ export const getProfile = async (): Promise<ProfileResponse> => {
 export const checkTokenValidity = async (): Promise<boolean> => {
     try {
         const response = await axios.get(`${endpoint}/validate-token`, { withCredentials: true });
-        console.log(response.data)
         return response.data.success;
     } catch (error) {
         console.error('An error occured', error);
@@ -130,7 +154,6 @@ export const getUserCart = async (): Promise<CartResponse> => {
         const response = await axios.get(`${endpoint}/cart`, {
             withCredentials: true
         })
-        console.log(response.data)
         return response.data as CartResponse;
     } catch (error) {
         if (axios.isAxiosError(error)) {
