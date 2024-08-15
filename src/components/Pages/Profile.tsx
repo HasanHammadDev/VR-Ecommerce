@@ -4,6 +4,7 @@ import Header from '../Header/Header';
 import { getProfile } from '../../Utility/api';
 import { useCart } from '../context/CartContext';
 import { ProfileResponse } from '../../../types/types';
+import { Link } from 'react-router-dom';
 
 const Profile: React.FC = () => {
   const { isLoggedIn } = useAuth();
@@ -30,7 +31,15 @@ const Profile: React.FC = () => {
   }, [isLoggedIn]);
 
   if (!isLoggedIn) {
-    return <div>Please log in to view your profile.</div>;
+    return (
+      <div className="h-screen flex justify-center items-center bg-gray-100">
+        <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+          <p className="text-2xl font-semibold mb-4 text-gray-800">
+            Please <Link to="/login" className="text-blue-600 hover:underline">log in</Link> to view your profile.
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (
