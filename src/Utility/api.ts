@@ -9,22 +9,22 @@ export const getProductDetails = async (id: number): Promise<Product> => {
         const response = await axios.get<Product>(`${endpoint}/products/${id}`)
         return response.data;
     } catch (error) {
-        console.error("Error", error)
+        console.error("Error fetching product details", error)
         throw error
     }
 }
 
 export const getProducts = async (): Promise<Product[]> => {
     try {
-      const response = await axios.get<Product[]>(`${endpoint}/products`);
-      return response.data;
+        const response = await axios.get<Product[]>(`${endpoint}/products`);
+        return response.data;
     } catch (error) {
-      console.error('Error fetching products', error);
-      throw error;
+        console.error('Error fetching products', error);
+        throw error;
     }
-  }
+}
 
-  export const registerAccount = async (accountInformation: accountInformation): Promise<GeneralServerResponse> => {
+export const registerAccount = async (accountInformation: accountInformation): Promise<GeneralServerResponse> => {
     try {
         const response = await axios.post(`${endpoint}/register`, accountInformation, {
             headers: {
@@ -34,7 +34,7 @@ export const getProducts = async (): Promise<Product[]> => {
         return response.data as GeneralServerResponse;
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            console.error('There was an error with the request:', error.response);
+            console.error('Error during registration:', error.response);
             return error.response?.data as GeneralServerResponse;
         } else {
             console.error('An unexpected error occurred:', error);
@@ -48,17 +48,16 @@ export const loginAccount = async (loginInformation: Credentials): Promise<Login
         const response = await axios.post(`${endpoint}/login`, loginInformation, {
             withCredentials: true,
             headers: {
-              'Content-Type': 'application/json'
+                'Content-Type': 'application/json'
             }
-          });
+        });
         return response.data as LoginResponse;
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            // Handle Axios-specific errors
             console.error('Error logging in:', error.response?.data || error.message);
             return error.response?.data;
         } else {
-            console.error('Unexpected error:', error);
+            console.error('Unexpected error during login:', error);
         }
         throw error;
     }
@@ -66,40 +65,39 @@ export const loginAccount = async (loginInformation: Credentials): Promise<Login
 
 export async function loginWithGoogle(credential: string) {
     try {
-      const response = await axios.post(`${endpoint}/login/google`, 
-        { credential },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true,
-        }
-      );
-      
-      return response.data;
+        const response = await axios.post(`${endpoint}/login/google`,
+            { credential },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                withCredentials: true,
+            }
+        );
+
+        return response.data;
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error('Error during Google login:', error.response?.data);
-        throw new Error(error.response?.data?.message || 'An error occurred during Google login');
-      } else {
-        console.error('Unexpected error:', error);
-        throw new Error('An unexpected error occurred');
-      }
+        if (axios.isAxiosError(error)) {
+            console.error('Error during Google login:', error.response?.data);
+            throw new Error(error.response?.data?.message || 'An error occurred during Google login');
+        } else {
+            console.error('Unexpected error during Google login:', error);
+            throw new Error('An unexpected error occurred');
+        }
     }
-  }
+}
 
 export const logoutAccount = async (): Promise<GeneralServerResponse> => {
     try {
         const response = await axios.post(`${endpoint}/logout`, null, {
             withCredentials: true
-          });
+        });
         return response.data as GeneralServerResponse;
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            // Handle Axios-specific errors
-            console.error('Error logging in:', error.response?.data || error.message);
+            console.error('Error during logout:', error.response?.data || error.message);
         } else {
-            console.error('Unexpected error:', error);
+            console.error('Unexpected error during logout:', error);
         }
         throw error;
     }
@@ -113,10 +111,9 @@ export const getProfile = async (): Promise<ProfileResponse> => {
         return response.data as ProfileResponse;
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            // Handle Axios-specific errors
             console.error('Error fetching profile:', error.response?.data || error.message);
         } else {
-            console.error('Unexpected error:', error);
+            console.error('Unexpected error fetching profile:', error);
         }
         throw error;
     }
@@ -127,7 +124,7 @@ export const checkTokenValidity = async (): Promise<boolean> => {
         const response = await axios.get(`${endpoint}/validate-token`, { withCredentials: true });
         return response.data.success;
     } catch (error) {
-        console.error('An error occured', error);
+        console.error('Error during token validation', error);
         return false;
     }
 };
@@ -140,10 +137,9 @@ export const addToCart = async (productInformation: ProductInformation): Promise
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            // Handle Axios-specific errors
-            console.error('Error fetching profile:', error.response?.data || error.message);
+            console.error('Error adding to cart:', error.response?.data || error.message);
         } else {
-            console.error('Unexpected error:', error);
+            console.error('Unexpected error during adding to cart:', error);
         }
         throw error;
     }
@@ -157,10 +153,23 @@ export const getUserCart = async (): Promise<CartResponse> => {
         return response.data as CartResponse;
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            // Handle Axios-specific errors
-            console.error('Error fetching profile:', error.response?.data || error.message);
+            console.error('Error fetching user cart:', error.response?.data || error.message);
         } else {
-        console.error(`There was an error fetching user's cart`, error);
+            console.error('Unexpected error during fetching user cart:', error);
+        }
+        throw error;
+    }
+}
+
+export const getProductReviews = async (productId: number): Promise => {
+    try {
+        const response = await axios.get(`${endpoint}/get-product-reviews/${productId}`);
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('Error fetching product reviews:', error.response?.data || error.message);
+        } else {
+            console.error('Unexpected error during fetching product reviews:', error);
         }
         throw error;
     }
