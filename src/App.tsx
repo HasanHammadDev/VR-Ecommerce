@@ -9,6 +9,7 @@ import Register from './components/Pages/Register';
 import { AuthProvider } from './components/context/AuthContext';
 import Profile from './components/Pages/Profile';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import AboutUs from './components/Pages/AbousUs';
 
 const App: React.FC = () => {
   const googleClientId = import.meta.env.VITE_REACT_APP_GOOGLE_CLIENT_ID as string;
@@ -24,6 +25,7 @@ const App: React.FC = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path='/profile' element={<Profile />} />
+            <Route path='/aboutus' element={<AboutUs />} />
           </Routes>
         </CartProvider>
       </AuthProvider>
