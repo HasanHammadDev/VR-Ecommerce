@@ -11,6 +11,7 @@ const Header: React.FC = () => {
     const loginRoute: string = '/login';
     const cartRoute: string = '/cart';
     const profileRoute: string = '/profile';
+    const aboutUsRoute: string = '/aboutus';
     const { itemCount, setItemCount } = useCart();
     const { isLoggedIn, setIsLoggedIn } = useAuth();
 
@@ -28,7 +29,7 @@ const Header: React.FC = () => {
             console.error("An error occurred during logout:", error);
         }
     };
-    
+
     return (
         <div className="flex items-center justify-around bg-slate-700 h-20">
             <Link to={homeRoute}><img src={logo} className='h-16 rounded-full' alt="logo" /></Link>
@@ -41,7 +42,9 @@ const Header: React.FC = () => {
                 <Link to={productsRoute}>
                     <button className='text-white m-1 hover:bg-gray-400 font-semibold py-2 px-4 rounded'>Products</button>
                 </Link>
-                <button className='text-white m-1 hover:bg-gray-400 font-semibold py-2 px-5 rounded'>About us</button>
+                <Link to={aboutUsRoute}>
+                    <button className='text-white m-1 hover:bg-gray-400 font-semibold py-2 px-5 rounded'>About us</button>
+                </Link>
             </div>
 
             <div className="flex items-center">
