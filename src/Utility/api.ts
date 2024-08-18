@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Product, accountInformation, GeneralServerResponse, Credentials, LoginResponse, ProfileResponse, ProductInformation, CartResponse } from "../../types/types";
+import { Product, accountInformation, GeneralServerResponse, Credentials, LoginResponse, ProfileResponse, ProductInformation, CartResponse, ReviewsResponse, ReviewInput } from "../../types/types";
 
 let endpoint = import.meta.env.VITE_REACT_APP_API_ENDPOINT as string;
 
@@ -161,9 +161,29 @@ export const getUserCart = async (): Promise<CartResponse> => {
     }
 }
 
-export const getProductReviews = async (productId: number): Promise => {
+export const postProductReview = async (review: ReviewInput): Promise<GeneralServerResponse> => {
     try {
-        const response = await axios.get(`${endpoint}/get-product-reviews/${productId}`);
+        const response = await axios.post(`${endpoint}/add-review/${review.productId}`, review, 
+            {
+                withCredentials: true
+            }
+        )
+        return response.data
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('Error posting product review:', error.response?.data || error.message);
+        } else {
+            console.error('Unexpected error while posting product review:', error);
+        }
+        throw error;
+    }
+}
+
+export const getProductReviews = async (productId: number): Promise<ReviewsResponse> => {
+    try {
+        const response = await axios.get(`${endpoint}/get-product-reviews/${productId}`, {
+            withCredentials: true
+        });
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
