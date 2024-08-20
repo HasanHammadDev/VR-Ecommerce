@@ -6,6 +6,7 @@ export interface Product {
     category: string;
     imageUrl: string;
     createdAt: Date;
+    rating: number;
 }
 
 export interface ProductsArray {
@@ -82,21 +83,42 @@ export interface ProductInformation {
 }
 
 export interface CartProduct {
+    product_id: number;
     product_name: string;
     description: string;
     price: number;
     image_url: string;
-  }
-  
-  export interface CartOrderItem {
+}
+
+export interface CartOrderItem {
     order_id: number;
     quantity: number;
     price: number;
     created_at: string;
     products_information: CartProduct;
-  }
-  
-  export interface CartResponse {
+}
+
+export interface CartResponse {
     success: boolean;
     order_items: CartOrderItem[];
-  }
+}
+
+export interface ReviewInput {
+    comment: string;
+    rating: number;
+    productId: number;
+}
+
+export interface Review {
+    comment: string;
+    created_at: string;
+    id: number;
+    rating: number;
+    username: string;
+}
+
+export interface ReviewsResponse {
+    message: string;
+    reviews: Review[];
+    success: boolean;
+}
