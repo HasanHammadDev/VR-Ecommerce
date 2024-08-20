@@ -32,8 +32,13 @@ const Header: React.FC = () => {
 
     return (
         <div className="flex items-center justify-around bg-slate-700 h-20">
-            <Link to={homeRoute}><img src={logo} className='h-16 rounded-full' alt="logo" /></Link>
-            {/* <h1 className='font-bold m-2 text-3xl text-white'>E-commerce</h1> */}
+            <Link to={homeRoute}>
+            <div className="flex items-center">
+                <img src={logo} className='h-16 rounded-full' alt="logo" />
+                <h1 className='font-bold m-2 text-3xl text-white'>VirtuShop</h1>
+            </div>
+            </Link>
+
             <div className='flex items-center justify-around w-68'>
                 <Link to={homeRoute}>
                     <button className='text-white m-1 hover:bg-gray-400 font-semibold py-2 px-4 rounded'>Home</button>
