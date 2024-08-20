@@ -4,43 +4,49 @@ import Header from '../Header/Header';
 import { getProfile } from '../../Utility/api';
 import { useCart } from '../context/CartContext';
 import { ProfileResponse } from '../../../types/types';
-import { Link } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
+import { ClipLoader } from 'react-spinners'; // Import the spinner
 
 const Profile: React.FC = () => {
   const { isLoggedIn } = useAuth();
   const { setItemCount } = useCart();
-  const [profileSummary, setProfileSummary] = useState<ProfileResponse>()
-  const formattedDate = profileSummary?.created_at ? new Date(profileSummary?.created_at).toLocaleString() : 'Invalid Date';
+  const [profileSummary, setProfileSummary] = useState<ProfileResponse | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
         const profile = await getProfile();
-        setItemCount(profile.item_count)
-        setProfileSummary(profile)
-        console.log(profile);
-        console.log(profileSummary)
+        setItemCount(profile.item_count);
+        setProfileSummary(profile);
       } catch (error) {
         console.error("Error fetching profile:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     if (isLoggedIn) {
       fetchUserProfile();
+    } else {
+      setLoading(false);
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, setItemCount]);
 
   if (!isLoggedIn) {
+    return <Navigate to="/login" />;
+  }
+
+  //Loading spinner
+  if (loading) {
     return (
-      <div className="h-screen flex justify-center items-center bg-gray-100">
-        <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-          <p className="text-2xl font-semibold mb-4 text-gray-800">
-            Please <Link to="/login" className="text-blue-600 hover:underline">log in</Link> to view your profile.
-          </p>
-        </div>
+      <div className='h-96 flex justify-center items-center'>
+        <ClipLoader color="#000" loading={loading} size={50} />
       </div>
     );
   }
+
+  const formattedDate = new Date(profileSummary!.created_at).toLocaleString();
 
   return (
     <div>
@@ -61,7 +67,7 @@ const Profile: React.FC = () => {
 
           <div className="flex justify-between mb-2">
             <p>Created On:</p>
-            <p>{new Date(formattedDate).toLocaleString()}</p>
+            <p>{formattedDate}</p>
           </div>
         </div>
       </div>
