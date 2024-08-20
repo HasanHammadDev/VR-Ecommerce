@@ -22,7 +22,7 @@ const ProductList: React.FC = () => {
 
     return (
         <>
-            <h1 className="font-semibold m-5 text-3xl">Featured</h1>
+            <h1 className="font-semibold m-5 text-4xl text-center">All Products</h1>
             <ProductComponent products={products} />
         </>
     );
