@@ -7,8 +7,8 @@ const AboutUs: React.FC = () => {
     return (
         <>
             <Header />
-            <div className="bg-gray-100 p-8 rounded-lg shadow-md">
-                <h1 className="text-3xl font-bold text-center text-red-600 mb-4">About Us!</h1>
+            <div className="bg-gray-100 p-8 rounded-lg shadow-md mx-32 border my-5">
+                <h1 className="text-4xl font-bold text-center text-red-600 mb-4">About Us!</h1>
 
                 <p className="text-lg text-gray-700 leading-relaxed mb-6">
                     Welcome to <Link to={productsRoute} className="font-semibold text-blue-600 hover:underline">VirtuShop</Link>, where the future of shopping meets the immersive world of virtual reality. We’re passionate about revolutionizing the online shopping experience, allowing you to explore and interact with products in a fully immersive 3D environment, all from the comfort of your own home.
