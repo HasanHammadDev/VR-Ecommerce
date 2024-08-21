@@ -22,7 +22,6 @@ const ProductDetails: React.FC = () => {
             try {
                 const response = await getProductDetails(Number(productId));
                 setProductDetails(response);
-                console.log(response);
             } catch (error) {
                 console.error("Error fetching product details", error);
             }
@@ -114,10 +113,10 @@ const ProductDetails: React.FC = () => {
     return (
         <>
             <Header />
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center border">
                 <div className="w-full max-w-2xl mt-10 mx-5">
-                    <h1 className="text-orange-700 text-5xl font-bold">{productDetails?.name}</h1>
-                    <img className="border my-5 h-96 w-full max-w-2xl object-cover" src={productDetails?.imageUrl} alt="Product" />
+                    <h1 className="text-gray-800 text-5xl font-bold">{productDetails?.name}</h1>
+                    <img className="border my-5 max-h-full w-full max-w-2xl object-cover" src={productDetails?.imageUrl} alt="Product" />
                 </div>
 
                 <div className="mt-24 mx-10 max-w-2xl">
@@ -126,14 +125,24 @@ const ProductDetails: React.FC = () => {
 
                     <Link
                         to={`/reviews/${productDetails?.id}`}
-                        className="flex flex-col items-center text-blue-500 hover:bg-blue-100 hover:text-blue-700 p-2 rounded-lg transition-all duration-300"
+                        className="flex flex-col items-center text-blue-500 hover:bg-blue-100 hover:text-blue-700 my-2 rounded-lg transition-all duration-300 max-w-28"
                     >
-                        <span className="text-blue-500 cursor-pointer">Reviews</span>
+                        <span className="text-blue-500 cursor-pointer px-5">Reviews</span>
                         {/* Star Rating */}
                         {productDetails?.rating != null && renderStars(productDetails.rating)}
                     </Link>
 
-                    <p className="text-3xl mt-5 font-bold">${productDetails?.price}</p>
+                    <div className="flex items-center">
+                        {productDetails?.salePrice ? (
+                            <>
+                                <p className="text-gray-500 text-3xl line-through mr-2">${productDetails?.price}</p>
+                                <p className="text-3xl font-bold text-orange-600">${productDetails?.salePrice}</p>
+                            </>
+                        ) : (
+                            <p className="text-3xl font-bold text-orange-600">${productDetails?.price}</p>
+                        )}
+                    </div>
+
                     <div>
                         <label htmlFor="quantity" className="mr-2">Quantity:</label>
                         <QuantitySelector />
@@ -154,7 +163,7 @@ const ProductDetails: React.FC = () => {
             </div>
 
             <div className="flex flex-col justify-center items-center w-full my-2">
-                <h1 className="text-3xl font-semibold">More Like This!</h1>
+                <h1 className="text-2xl font-semibold mt-5">More Like This!</h1>
                 <div>
                     <ProductComponent products={similarProducts} />
                 </div>

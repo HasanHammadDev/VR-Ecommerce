@@ -11,6 +11,7 @@ import Profile from './components/Pages/Profile';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import AboutUs from './components/Pages/AbousUs';
 import Reviews from './components/Pages/Reviews';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const App: React.FC = () => {
   const googleClientId = import.meta.env.VITE_REACT_APP_GOOGLE_CLIENT_ID as string;
@@ -19,21 +20,24 @@ const App: React.FC = () => {
       <AuthProvider>
         <CartProvider>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/products/:productId" element={<ProductDetails />} />
-            <Route path="/cart" element={<Cart />} />
+            {/* Public routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/aboutus" element={<AboutUs />} />
-            <Route path="/reviews/:productId" element={<Reviews />} />
+
+            {/* Protected routes */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/products/:productId" element={<ProductDetails />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/aboutus" element={<AboutUs />} />
+              <Route path="/reviews/:productId" element={<Reviews />} />
+            </Route>
           </Routes>
         </CartProvider>
       </AuthProvider>
     </GoogleOAuthProvider>
-
-
   );
 };
 

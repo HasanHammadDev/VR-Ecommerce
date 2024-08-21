@@ -7,6 +7,8 @@ export interface Product {
     imageUrl: string;
     createdAt: Date;
     rating: number;
+    isOnSale: boolean;
+    salePrice: number | null;
 }
 
 export interface ProductsArray {
@@ -87,6 +89,7 @@ export interface CartProduct {
     product_name: string;
     description: string;
     price: number;
+    sale_price: number | null;
     image_url: string;
 }
 

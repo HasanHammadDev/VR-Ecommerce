@@ -161,6 +161,24 @@ export const getUserCart = async (): Promise<CartResponse> => {
     }
 }
 
+export const updateCartItemQuantity = async (orderId: number, productId:number, newQuantity: number): Promise<GeneralServerResponse> => {
+    try {
+        const response = await axios.put(`${endpoint}/update-quantity`, {orderId, productId, newQuantity}, 
+            {
+                withCredentials: true
+            }
+        )
+        return response.data
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('Error updating item quantity:', error.response?.data || error.message);
+        } else {
+            console.error('Unexpected error while updating quantity:', error);
+        }
+        throw error;
+    }
+    }
+
 export const postProductReview = async (review: ReviewInput): Promise<GeneralServerResponse> => {
     try {
         const response = await axios.post(`${endpoint}/add-review/${review.productId}`, review, 

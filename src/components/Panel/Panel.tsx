@@ -1,49 +1,63 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { SlideshowPanelProps } from '../../../types/types';
-
 
 const Panel: React.FC<SlideshowPanelProps> = ({ images }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
+    const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
 
-    const nextSlide = () => {
-        setCurrentImageIndex((prevIndex) =>
-            prevIndex === images.length - 1 ? 0 : prevIndex + 1
-        );
-    };
+    const nextSlide = useCallback(() => {
+        if (!isTransitioning) {
+            setIsTransitioning(true);
+            setTimeout(() => {
+                setCurrentImageIndex((prevIndex) =>
+                    (prevIndex + 1) % images.length
+                );
+                setIsTransitioning(false);
+            }, 600);
+        }
+    }, [images.length, isTransitioning]);
 
-    const prevSlide = () => {
-        setCurrentImageIndex((prevIndex) =>
-            prevIndex === 0 ? images.length - 1 : prevIndex - 1
-        );
-    };
+    const prevSlide = useCallback(() => {
+        if (!isTransitioning) {
+            setIsTransitioning(true);
+            setTimeout(() => {
+                setCurrentImageIndex((prevIndex) =>
+                    (prevIndex - 1 + images.length) % images.length
+                );
+                setIsTransitioning(false);
+            }, 500);
+        }
+    }, [images.length, isTransitioning]);
 
     useEffect(() => {
-        const interval = setInterval(nextSlide, 3000); // Change slide every 3 seconds
-
+        const interval = setInterval(nextSlide, 4000); // Change slide every 4 seconds
         return () => clearInterval(interval);
-    }, [images.length, currentImageIndex]);
+    }, [nextSlide]);
 
     return (
-        <div className="flex items-center justify-center bg-white border shadow-2xl shadow-black-900 rounded-md relative mx-60 mt-5 h-96">
+        <div
+            className="relative w-full max-w-3xl mx-auto h-80 overflow-hidden my-10 border rounded-md"
+            aria-live="polite"
+        >
+            <img
+                className={`w-full h-full object-cover rounded-md transition-opacity duration-1000 ease-in-out ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
+                src={images[currentImageIndex]}
+                alt={`Slideshow Image ${currentImageIndex + 1}`}
+            />
             <button
-                className="fixed left-56 bg-slate-500 text-white px-3 py-1 rounded-3xl font-semibold"
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-slate-500 text-white px-3 py-1 rounded-2xl font-semibold z-10 hover:bg-slate-700"
                 onClick={prevSlide}
+                aria-label="Previous slide"
             >
                 &lt;
             </button>
             <button
-                className="fixed right-56 bg-slate-500 text-white px-3 py-1 rounded-3xl font-semibold"
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-slate-500 text-white px-3 py-1 rounded-2xl font-semibold z-10 hover:bg-slate-700"
                 onClick={nextSlide}
+                aria-label="Next slide"
             >
                 &gt;
             </button>
-            <img
-                key={currentImageIndex}
-                src={images[currentImageIndex]}
-                alt={`Slideshow Image ${currentImageIndex + 1}`}
-                className="w-full h-full object-cover rounded-md transition-opacity duration-500"
-                style={{ opacity: 1 }}
-            />
         </div>
     );
 };

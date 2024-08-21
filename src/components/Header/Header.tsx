@@ -18,7 +18,6 @@ const Header: React.FC = () => {
     const handleLogout = async () => {
         try {
             const response = await logoutAccount();
-            console.log(response);
             if (response.success) {
                 setIsLoggedIn(false);
                 setItemCount(0)
@@ -40,15 +39,15 @@ const Header: React.FC = () => {
             </Link>
 
             <div className='flex items-center justify-around w-68'>
-                <Link to={homeRoute}>
-                    <button className='text-white m-1 hover:bg-gray-400 font-semibold py-2 px-4 rounded'>Home</button>
+                <Link to={homeRoute} className="m-1">
+                    <button className='text-white hover:bg-gray-400 font-semibold py-2 px-4 rounded'>Home</button>
                 </Link>
 
-                <Link to={productsRoute}>
-                    <button className='text-white m-1 hover:bg-gray-400 font-semibold py-2 px-4 rounded'>Products</button>
+                <Link to={productsRoute} className="m-1">
+                    <button className='text-white hover:bg-gray-400 font-semibold py-2 px-4 rounded'>Products</button>
                 </Link>
-                <Link to={aboutUsRoute}>
-                    <button className='text-white m-1 hover:bg-gray-400 font-semibold py-2 px-5 rounded'>About us</button>
+                <Link to={aboutUsRoute} className="m-1">
+                    <button className='text-white hover:bg-gray-400 font-semibold py-2 px-5 rounded'>About us</button>
                 </Link>
             </div>
 
@@ -62,8 +61,8 @@ const Header: React.FC = () => {
 
                 {isLoggedIn ?
                     <>
-                        <Link to={profileRoute}>
-                            <button className="text-white ml-10 hover:bg-gray-400 font-semibold py-2 px-4 rounded">My Profile</button>
+                        <Link to={profileRoute} className="ml-10">
+                            <button className="text-white hover:bg-gray-400 font-semibold px-3 py-2 rounded">My Profile</button>
                         </Link>
                         <button onClick={handleLogout} className="text-white hover:bg-gray-400 font-semibold py-2 px-4 rounded">Logout</button>
                     </>
