@@ -1,30 +1,40 @@
-# React + TypeScript + Vite
+# VirtuShop
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a VR E-commerce Website designed to provide users with a seamless shopping experience in a virtual environment. The platform integrates various features, including user authentication, product browsing, shopping cart management, and product reviews. The application is built with a modern tech stack, ensuring a smooth and responsive user experience.
 
-Currently, two official plugins are available:
+Please refer to the [VitruShop-backend] repository for the backend code, which is located here:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+https://github.com/HasanHammadDev/VirtuShop-backend
+## Screenshots
+### Home Page
+  ![Home Page](https://i.ibb.co/7CKgc4M/home.jpg)
+### Products Page
+  ![Products Page](https://i.ibb.co/Xsct0Vh/productslist.jpg)
+### Each Product Page
+  ![Each Product Page](https://i.ibb.co/phzhm2y/product.jpg)
+### Cart Page
+  ![Cart Page](https://i.ibb.co/8BBc5dX/cart.jpg)
+### Reviews Page
+  ![Reviews Page](https://i.ibb.co/n6Tnsst/reviews.jpg)
+### Login Page
+  ![Login Page](https://i.ibb.co/gMD2BGJ/login.jpg)
+  
+## Installation
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+Install my-project with npm
+```bash 
+  git clone https://github.com/HasanHammadDev/VirtuShop.git
+  cd VirtuShop
+  npm i
+  npm run dev
 ```
+## Environment Variables
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+To run this project, you will need to add the following environment variables to your .env file in the root of your VirtuShop folder.
+
+`VITE_REACT_APP_GOOGLE_CLIENT_ID`="your-google-client-ID"
+
+`VITE_REACT_APP_API_ENDPOINT`="your-API-endpoint"
+## Contributing
+
+Contributions are always welcome!
