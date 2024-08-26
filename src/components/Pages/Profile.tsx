@@ -12,6 +12,7 @@ const Profile: React.FC = () => {
   const { setItemCount } = useCart();
   const [profileSummary, setProfileSummary] = useState<ProfileResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -21,6 +22,7 @@ const Profile: React.FC = () => {
         setProfileSummary(profile);
       } catch (error) {
         console.error("Error fetching profile:", error);
+        setError("Failed to load profile. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -37,7 +39,6 @@ const Profile: React.FC = () => {
     return <Navigate to="/login" />;
   }
 
-  //Loading spinner
   if (loading) {
     return (
       <div className='h-96 flex justify-center items-center'>
@@ -46,7 +47,17 @@ const Profile: React.FC = () => {
     );
   }
 
-  const formattedDate = new Date(profileSummary!.created_at).toLocaleString();
+  if (error) {
+    return (
+      <div className='h-96 flex justify-center items-center'>
+        <p className='text-red-500'>{error}</p>
+      </div>
+    );
+  }
+
+  const formattedDate = profileSummary
+    ? new Date(profileSummary.created_at).toLocaleString()
+    : '';
 
   return (
     <div>
@@ -57,17 +68,17 @@ const Profile: React.FC = () => {
 
           <div className="flex justify-between mb-2">
             <p className="text-gray-600">Username:</p>
-            <p>{profileSummary?.username}</p>
+            <p>{profileSummary?.username || 'N/A'}</p>
           </div>
 
           <div className="flex justify-between mb-2">
             <p className="text-gray-600">Email:</p>
-            <p>{profileSummary?.email}</p>
+            <p>{profileSummary?.email || 'N/A'}</p>
           </div>
 
           <div className="flex justify-between mb-2">
             <p>Created On:</p>
-            <p>{formattedDate}</p>
+            <p>{formattedDate || 'N/A'}</p>
           </div>
         </div>
       </div>
