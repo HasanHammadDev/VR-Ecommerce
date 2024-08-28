@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { ProductsArray } from "../../../../types/types";
 
-
 const Product: React.FC<ProductsArray> = ({ products }) => {
     const productDetailsRoute: string = "/products";
 
@@ -9,6 +8,7 @@ const Product: React.FC<ProductsArray> = ({ products }) => {
         <div className="border m-5 rounded-lg p-6 flex flex-wrap justify-center items-start shadow-2xl bg-white">
             {products.map((product) => (
                 <Link
+                    key={product.id}
                     className="flex flex-col items-center bg-gray-100 rounded-lg overflow-hidden shadow-md m-4 p-4 max-w-[300px] hover:shadow-2xl transition-all"
                     to={`${productDetailsRoute}/${product.id}`}
                 >
