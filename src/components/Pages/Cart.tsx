@@ -79,7 +79,7 @@ const Cart: React.FC = () => {
                                             <p className="text-gray-500">Quantity:</p>
                                             <div className="flex items-center mt-2">
                                                 <button
-                                                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-3 rounded-l"
+                                                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold px-3 py-0.5 rounded mx-1"
                                                     onClick={() => handleDecrement(orderItem.order_id, orderItem.products_information.product_id, orderItem.quantity)}
                                                 >
                                                     -
@@ -87,7 +87,7 @@ const Cart: React.FC = () => {
                                                 <input
                                                     type="number"
                                                     min="1"
-                                                    className="border-t border-b border-gray-300 text-center w-16 focus:outline-none"
+                                                    className="border border-gray-300 text-center w-16 focus:outline-none rounded"
                                                     value={orderItem.quantity}
                                                     onChange={(e) =>
                                                         handleQuantityChange(
@@ -98,7 +98,7 @@ const Cart: React.FC = () => {
                                                     }
                                                 />
                                                 <button
-                                                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-3 rounded-r"
+                                                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold px-2.5 py-0.5 rounded mx-1"
                                                     onClick={() => handleIncrement(orderItem.order_id, orderItem.products_information.product_id, orderItem.quantity)}
                                                 >
                                                     +
