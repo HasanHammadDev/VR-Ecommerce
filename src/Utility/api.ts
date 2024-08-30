@@ -161,9 +161,9 @@ export const getUserCart = async (): Promise<CartResponse> => {
     }
 }
 
-export const updateCartItemQuantity = async (orderId: number, productId:number, newQuantity: number): Promise<GeneralServerResponse> => {
+export const updateCartItemQuantity = async (orderId: number, productId: number, newQuantity: number): Promise<GeneralServerResponse> => {
     try {
-        const response = await axios.put(`${endpoint}/update-quantity`, {orderId, productId, newQuantity}, 
+        const response = await axios.put(`${endpoint}/update-quantity`, { orderId, productId, newQuantity },
             {
                 withCredentials: true
             }
@@ -177,11 +177,11 @@ export const updateCartItemQuantity = async (orderId: number, productId:number, 
         }
         throw error;
     }
-    }
+}
 
 export const postProductReview = async (review: ReviewInput): Promise<GeneralServerResponse> => {
     try {
-        const response = await axios.post(`${endpoint}/add-review/${review.productId}`, review, 
+        const response = await axios.post(`${endpoint}/add-review/${review.productId}`, review,
             {
                 withCredentials: true
             }
@@ -210,5 +210,45 @@ export const getProductReviews = async (productId: number): Promise<ReviewsRespo
             console.error('Unexpected error during fetching product reviews:', error);
         }
         throw error;
+    }
+}
+
+export const createPaymentIntent = async (amount: number): Promise<{ clientSecret: string }> => {
+    try {
+        const response = await axios.post(`${endpoint}/create-payment-intent`, { amount }, {
+            withCredentials: true,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('Error creating payment intent:', error.response?.data || error.message);
+            throw new Error(error.response?.data?.message || 'An error occurred while creating payment intent');
+        } else {
+            console.error('Unexpected error during payment intent creation:', error);
+            throw new Error('An unexpected error occurred');
+        }
+    }
+}
+
+export const removeItemFromOrder = async (productId: number): Promise<GeneralServerResponse> => {
+    try {
+        const response = await axios.put(`${endpoint}/remove-item`, { productId }, {
+            withCredentials: true,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('Error creating payment intent:', error.response?.data || error.message);
+            throw new Error(error.response?.data?.message || 'An error occurred while creating payment intent');
+        } else {
+            console.error('Unexpected error during payment intent creation:', error);
+            throw new Error('An unexpected error occurred');
+        }
     }
 }
