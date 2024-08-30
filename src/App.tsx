@@ -12,6 +12,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import AboutUs from './components/Pages/AbousUs';
 import Reviews from './components/Pages/Reviews';
 import ProtectedRoute from './components/ProtectedRoute';
+import Payment from './components/Pages/Payment';
 
 const App: React.FC = () => {
   const googleClientId = import.meta.env.VITE_REACT_APP_GOOGLE_CLIENT_ID as string;
@@ -33,6 +34,7 @@ const App: React.FC = () => {
               <Route path="/profile" element={<Profile />} />
               <Route path="/aboutus" element={<AboutUs />} />
               <Route path="/reviews/:productId" element={<Reviews />} />
+              <Route path="/payment/:cartId" element={<Payment />} />
             </Route>
           </Routes>
         </CartProvider>

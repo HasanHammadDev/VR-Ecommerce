@@ -2,7 +2,7 @@ import { useEffect, useState, ChangeEvent } from "react";
 import { useParams, Link } from "react-router-dom";
 import Header from "../Header/Header";
 import { useCart } from "../context/CartContext";
-import { getProducts, getProductDetails, addToCart } from "../../Utility/api";
+import { getProducts, getProductDetails, addToCart, getUserCart } from "../../Utility/api";
 import ProductComponent from "../Products/Product/Product";
 import { Product, ProductInformation } from "../../../types/types";
 
@@ -58,14 +58,27 @@ const ProductDetails: React.FC = () => {
 
     const addProductToCart = async (productInformation: ProductInformation) => {
         try {
+            const currentCart = await getUserCart();
+            
+            // Check if the product is already in the cart
+            const productExistsInCart = currentCart.order_items.some(item => item.products_information.product_id === productInformation.product_id);
+    
+            // Add the product to the cart
             const response = await addToCart(productInformation);
+    
             if (response.success) {
-                incrementItem();
+                // Only increment if the product is not already in the cart
+                if (!productExistsInCart) {
+                    incrementItem();
+                }
+            } else {
+                console.error("Failed to add product to cart:", response.message);
             }
         } catch (error) {
             console.error("There was an error adding the product to cart", error);
         }
     };
+    
 
     const QuantitySelector: React.FC = () => {
         const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -153,11 +166,6 @@ const ProductDetails: React.FC = () => {
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl mt-5 mr-5"
                     >
                         Add To Cart
-                    </button>
-                    <button
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl mt-5"
-                    >
-                        Buy Now
                     </button>
                 </div>
             </div>
