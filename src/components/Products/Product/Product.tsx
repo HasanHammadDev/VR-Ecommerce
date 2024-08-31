@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ProductsArray } from "../../../../types/types";
+import renderStars from "../../UI/ReviewsStars.tsx";
 
 const Product: React.FC<ProductsArray> = ({ products }) => {
     const productDetailsRoute: string = "/products";
@@ -19,6 +20,9 @@ const Product: React.FC<ProductsArray> = ({ products }) => {
                             src={product.imageUrl}
                             alt={product.name}
                         />
+
+                        {product?.rating != null && renderStars(product.rating)}
+
                         <div className="flex justify-center w-full">
                             {product.isOnSale ? (
                                 <div className="flex">

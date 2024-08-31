@@ -5,6 +5,8 @@ import { useCart } from "../context/CartContext";
 import { getProducts, getProductDetails, addToCart, getUserCart } from "../../Utility/api";
 import ProductComponent from "../Products/Product/Product";
 import { Product, ProductInformation } from "../../../types/types";
+import { ClipLoader } from "react-spinners";
+import renderStars from "../UI/ReviewsStars";
 
 const ProductDetails: React.FC = () => {
     const { incrementItem } = useCart();
@@ -12,6 +14,7 @@ const ProductDetails: React.FC = () => {
     const [productDetails, setProductDetails] = useState<Product | null>(null);
     const [similarProducts, setSimilarProducts] = useState<Product[]>([]);
     const [quantity, setQuantity] = useState<number>(1);
+    const [loading, setLoading] = useState<boolean>(true);
     const [productInformation, setProductInformation] = useState<ProductInformation>({
         product_id: Number(productId),
         quantity: quantity
@@ -24,6 +27,8 @@ const ProductDetails: React.FC = () => {
                 setProductDetails(response);
             } catch (error) {
                 console.error("Error fetching product details", error);
+            } finally {
+                setLoading(false)
             }
         };
 
@@ -79,6 +84,13 @@ const ProductDetails: React.FC = () => {
         }
     };
     
+    if (loading) {
+        return (
+          <div className='h-96 flex justify-center items-center'>
+            <ClipLoader color="#000" loading={loading} size={50} />
+          </div>
+        );
+      }
 
     const QuantitySelector: React.FC = () => {
         const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -100,28 +112,6 @@ const ProductDetails: React.FC = () => {
         );
     };
 
-    const renderStars = (rating: number) => {
-        const fullStars = Math.floor(rating);
-        const hasHalfStar = rating % 1 !== 0;
-        const emptyStars = 5 - Math.ceil(rating);
-
-        return (
-            <div className="flex items-center">
-                {[...Array(fullStars)].map((_, index) => (
-                    <span key={`full-${index}`} className="text-2xl text-yellow-500">&#9733;</span>
-                ))}
-                {hasHalfStar && (
-                    <span className="text-2xl relative">
-                        <span className="absolute top-0 left-0 text-yellow-500" style={{ width: '50%', overflow: 'hidden' }}>&#9733;</span>
-                        <span className="text-2xl text-gray-300">&#9733;</span>
-                    </span>
-                )}
-                {[...Array(emptyStars)].map((_, index) => (
-                    <span key={`empty-${index}`} className="text-2xl text-gray-300">&#9733;</span>
-                ))}
-            </div>
-        );
-    };
 
     return (
         <>

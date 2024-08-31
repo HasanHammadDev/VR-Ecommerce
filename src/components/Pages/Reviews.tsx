@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getProductReviews, postProductReview } from "../../Utility/api";
 import { useAuth } from "../context/AuthContext";
 import { Review, ReviewInput } from "../../../types/types";
+import renderStars from "../UI/ReviewsStars";
 
 
 const Reviews: React.FC = () => {
@@ -120,17 +121,7 @@ const Reviews: React.FC = () => {
                             <div className="m-5 p-6 border border-gray-200 rounded-lg shadow-md bg-white" key={review.id}>
                                 <h2 className="text-xl font-semibold text-gray-800 mb-2">{review.username}</h2>
                                 <div className="flex items-center mb-2">
-                                    {[...Array(5)].map((_, index) => {
-                                        const starIndex = index + 1;
-                                        return (
-                                            <span
-                                                key={starIndex}
-                                                className={`text-2xl ${starIndex <= review.rating ? 'text-yellow-500' : 'text-gray-300'}`}
-                                            >
-                                                &#9733;
-                                            </span>
-                                        );
-                                    })}
+                                    {review?.rating != null && renderStars(review.rating)}
                                 </div>
                                 <p className="text-gray-700 mb-2">{review.comment}</p>
                                 <p className="text-sm text-gray-500">{new Date(review.created_at).toLocaleDateString()}</p>
