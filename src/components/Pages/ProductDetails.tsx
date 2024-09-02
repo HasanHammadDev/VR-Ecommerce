@@ -7,14 +7,18 @@ import ProductComponent from "../Products/Product/Product";
 import { Product, ProductInformation } from "../../../types/types";
 import { ClipLoader } from "react-spinners";
 import renderStars from "../UI/ReviewsStars";
+import Alert from "../UI/Alert";
 
 const ProductDetails: React.FC = () => {
     const { incrementItem } = useCart();
-    const { productId } = useParams();
+    const { productId } = useParams<{ productId: string }>();
     const [productDetails, setProductDetails] = useState<Product | null>(null);
     const [similarProducts, setSimilarProducts] = useState<Product[]>([]);
     const [quantity, setQuantity] = useState<number>(1);
     const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+    const [addToCartError, setAddToCartError] = useState<string | null>(null);
+
     const [productInformation, setProductInformation] = useState<ProductInformation>({
         product_id: Number(productId),
         quantity: quantity
@@ -23,23 +27,23 @@ const ProductDetails: React.FC = () => {
     useEffect(() => {
         const fetchProductDetails = async () => {
             try {
+                if (!productId) throw new Error("Product ID is missing");
                 const response = await getProductDetails(Number(productId));
                 setProductDetails(response);
             } catch (error) {
                 console.error("Error fetching product details", error);
+                setError("Failed to load product details. Please try again later.");
             } finally {
-                setLoading(false)
+                setLoading(false);
             }
         };
 
         const fetchSimilarProducts = async () => {
             const randomizedProducts = (response: Product[]) => {
-                const filteredResponse = response.filter(product => product.id !== productDetails?.id);
-                // Pick 4 random items from the filtered array
+                const filteredResponse = response.filter(product => product.id !== Number(productId));
                 const randomItems = filteredResponse
                     .sort(() => 0.5 - Math.random())
                     .slice(0, 4);
-
                 setSimilarProducts(randomItems);
             };
             try {
@@ -47,6 +51,7 @@ const ProductDetails: React.FC = () => {
                 randomizedProducts(response);
             } catch (error) {
                 console.error("Error fetching similar products", error);
+                setError("Failed to load similar products. Please try again later.");
             }
         };
 
@@ -56,45 +61,42 @@ const ProductDetails: React.FC = () => {
 
     useEffect(() => {
         setProductInformation(prevState => ({
-            ...prevState, // keep the existing product_id
+            ...prevState,
             quantity: quantity
         }));
     }, [quantity]);
 
     const addProductToCart = async (productInformation: ProductInformation) => {
+        setAddToCartError(null);
         try {
             const currentCart = await getUserCart();
-            
-            // Check if the product is already in the cart
-            const productExistsInCart = currentCart.order_items.some(item => item.products_information.product_id === productInformation.product_id);
-    
-            // Add the product to the cart
+            const productExistsInCart = currentCart.order_items.some(item =>
+                item.products_information.product_id === productInformation.product_id
+            );
             const response = await addToCart(productInformation);
-    
+
             if (response.success) {
-                // Only increment if the product is not already in the cart
                 if (!productExistsInCart) {
                     incrementItem();
                 }
             } else {
-                console.error("Failed to add product to cart:", response.message);
+                throw new Error(response.message || "Failed to add product to cart");
             }
         } catch (error) {
             console.error("There was an error adding the product to cart", error);
+            setAddToCartError("Failed to add product to cart. Please try again.");
         }
     };
-    
-    if (loading) {
-        return (
-          <div className='h-96 flex justify-center items-center'>
-            <ClipLoader color="#000" loading={loading} size={50} />
-          </div>
-        );
-      }
 
     const QuantitySelector: React.FC = () => {
         const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
-            setQuantity(parseInt(event.target.value, 10));
+            const newQuantity = parseInt(event.target.value, 10);
+            if (isNaN(newQuantity) || newQuantity < 1) {
+                setError("Invalid quantity selected");
+            } else {
+                setQuantity(newQuantity);
+                setError(null);
+            }
         };
 
         return (
@@ -112,37 +114,51 @@ const ProductDetails: React.FC = () => {
         );
     };
 
+    if (loading) {
+        return (
+            <div className='h-96 flex justify-center items-center'>
+                <ClipLoader color="#000" loading={loading} size={50} />
+            </div>
+        );
+    }
+
+    if (!productDetails) {
+        return <Alert message="Product not found" type="error" />;
+    }
+
+    if (error) {
+        return <Alert message={error} type="error" />;
+    }
 
     return (
         <>
             <Header />
             <div className="flex justify-center items-center border">
                 <div className="w-full max-w-2xl mt-10 mx-5">
-                    <h1 className="text-gray-800 text-5xl font-bold">{productDetails?.name}</h1>
-                    <img className="border my-5 max-h-full w-full max-w-2xl object-cover" src={productDetails?.imageUrl} alt="Product" />
+                    <h1 className="text-gray-800 text-5xl font-bold">{productDetails.name}</h1>
+                    <img className="border my-5 max-h-full w-full max-w-2xl object-cover" src={productDetails.imageUrl} alt={productDetails.name} />
                 </div>
 
                 <div className="mt-24 mx-10 max-w-2xl">
                     <h1 className="text-3xl font-semibold">Description</h1>
-                    <p className="my-3">{productDetails?.description} Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum nihil cum nobis, voluptatibus velit fugiat aspernatur soluta eligendi eveniet sed quibusdam nesciunt tenetur molestiae et hic maxime incidunt libero aliquid!</p>
+                    <p className="my-3">{productDetails.description} Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum nihil cum nobis, voluptatibus velit fugiat aspernatur soluta eligendi eveniet sed quibusdam nesciunt tenetur molestiae et hic maxime incidunt libero aliquid!</p>
 
                     <Link
-                        to={`/reviews/${productDetails?.id}`}
+                        to={`/reviews/${productDetails.id}`}
                         className="flex flex-col items-center text-blue-500 hover:bg-blue-100 hover:text-blue-700 my-2 rounded-lg transition-all duration-300 max-w-28"
                     >
                         <span className="text-blue-500 cursor-pointer px-5">Reviews</span>
-                        {/* Star Rating */}
-                        {productDetails?.rating != null && renderStars(productDetails.rating)}
+                        {productDetails.rating != null && renderStars(productDetails.rating)}
                     </Link>
 
                     <div className="flex items-center">
-                        {productDetails?.salePrice ? (
+                        {productDetails.salePrice ? (
                             <>
-                                <p className="text-gray-500 text-3xl line-through mr-2">${productDetails?.price}</p>
-                                <p className="text-3xl font-bold text-orange-600">${productDetails?.salePrice}</p>
+                                <p className="text-gray-500 text-3xl line-through mr-2">${productDetails.price}</p>
+                                <p className="text-3xl font-bold text-orange-600">${productDetails.salePrice}</p>
                             </>
                         ) : (
-                            <p className="text-3xl font-bold text-orange-600">${productDetails?.price}</p>
+                            <p className="text-3xl font-bold text-orange-600">${productDetails.price}</p>
                         )}
                     </div>
 
@@ -150,6 +166,8 @@ const ProductDetails: React.FC = () => {
                         <label htmlFor="quantity" className="mr-2">Quantity:</label>
                         <QuantitySelector />
                     </div>
+
+                    {addToCartError && <Alert message={addToCartError} type="error" />}
 
                     <button
                         onClick={() => addProductToCart(productInformation)}
