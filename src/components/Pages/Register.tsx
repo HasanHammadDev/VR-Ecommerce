@@ -81,10 +81,9 @@ const Register: React.FC = () => {
             } else if (!response.success) {
                 setErrorMsg(response.message);
             } else {
-                setErrorMsg('Account registered successfully. Redirecting to home page...');
-
+                setErrorMsg('Account registered successfully.');
                 setTimeout(() => {
-                    navigate('/');
+                    navigate('/login');
                 }, 2500);
             }
         } catch (error) {

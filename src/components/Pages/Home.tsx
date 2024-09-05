@@ -4,6 +4,7 @@ import { getProducts } from "../../Utility/api";
 import Header from "../Header/Header";
 import Panel from "../Panel/Panel";
 import ProductComponent from "../Products/Product/Product";
+import { ClipLoader } from "react-spinners";
 
 const Home: React.FC = () => {
   const images = [
@@ -13,6 +14,7 @@ const Home: React.FC = () => {
   ];
 
   const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -22,22 +24,31 @@ const Home: React.FC = () => {
         setProducts(productsOnSale);
       } catch (error) {
         console.error('Error fetching products', error);
+      } finally {
+        setLoading(false)
       }
     };
 
     fetchProducts();
   }, []);
 
-return (
+  if (loading) {
+    return (
+      <div className='h-96 flex justify-center items-center'>
+        <ClipLoader color="#000" loading={loading} size={50} />
+      </div>
+    );
+  }
+  return (
     <>
-        <Header />
-        <Panel images={images} />
-        <div className="flex flex-col justify-center items-center w-full">
+      <Header />
+      <Panel images={images} />
+      <div className="flex flex-col justify-center items-center w-full">
         <h1 className="text-2xl font-semibold mt-5">On Sale!!</h1>
         <ProductComponent products={products} />
-        </div>
+      </div>
     </>
-);
+  );
 }
 
 export default Home;
